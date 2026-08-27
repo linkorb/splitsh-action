@@ -2,6 +2,8 @@
 
 A Github Action that allows you to split your monorepo into multiple repositories using [splitsh lite](https://github.com/splitsh/lite).
 
+> This is a fork of [claudiodekker/splitsh-action](https://github.com/claudiodekker/splitsh-action) with a fix for the Git authentication credential storage.
+
 ## Usage
 
 1. Create a new file in your repository at `.github/workflows/split.yml`
@@ -35,7 +37,7 @@ A Github Action that allows you to split your monorepo into multiple repositorie
              fetch-depth: 0
    
          - name: Split package ${{ matrix.package }}
-           uses: "claudiodekker/splitsh-action@v1.0.0"
+           uses: "linkorb/splitsh-action@v1.0.1"
            env:
              GITHUB_TOKEN: ${{ secrets.MONOREPO_SPLITTER_PERSONAL_ACCESS_TOKEN }}
            with:
