@@ -9,6 +9,7 @@ FROM alpine:latest
 LABEL repository="https://github.com/linkorb/splitsh-action"
 LABEL homepage="https://github.com/linkorb/splitsh-action"
 LABEL maintainer="Ayesh Karunaratne <ayesh@aye.sh>"
+LABEL org.opencontainers.image.description "split-sh runner container image"
 
 RUN apk add --no-cache git openssh-client libc6-compat && \
     mkdir -p ~/.ssh && \
