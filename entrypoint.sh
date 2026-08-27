@@ -18,7 +18,7 @@ remote_https=$(echo "$remote" | sed 's/^git@github.com:/https:\/\/github.com\//'
 
 # Set necessary git configuration options
 git config --global --add safe.directory "$GITHUB_WORKSPACE"
-git config --local --unset-all http.https://github.com/.extraheader # https://github.com/actions/checkout/issues/162#issuecomment-590821598
+git config --local --unset-all http.https://github.com/.extraheader # https://github.com/actions/checkout/issues/162#issuecomment-590821598 || true
 
 # Split the repository
 git remote add splitsh_target_remote "$remote_https"
