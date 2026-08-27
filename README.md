@@ -58,4 +58,4 @@ A Github Action that allows you to split your monorepo into multiple repositorie
 
 7. Commit and push the file to your (monorepo) repository.
 
-Once done, the  GitHub Action will automatically split your monorepo into the target repositories when a commit is added to the provided branches (in the above example, `master`, `1.x`, `2.x` etc.), or when a new tag (e.g. `v1.0.0`) is added to the repository.
+Once done, the GitHub Action will automatically split your monorepo into the target repositories when a commit is added to the provided branches (in the above example, `master`, `1.x`, `2.x` etc.), or when a new tag (e.g. `v1.0.0`) is added to the repository.

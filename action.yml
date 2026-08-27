@@ -1,7 +1,7 @@
 name: 'Splitsh Lite Action'
 description: 'Automatically synchronize monolithic repositories to standalone repositories'
 
-author: Claudio Dekker <claudio@ubient.net>
+author: Ayesh Karunaratne <ayesh@linkorb.com>
 
 inputs:
   prefix:
@@ -25,7 +25,7 @@ branding:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/claudiodekker/splitsh-action:latest'
+  image: 'docker://ghcr.io/linkorb/splitsh-action:latest'
   args:
     - ${{ inputs.prefix }}
     - ${{ inputs.remote }}

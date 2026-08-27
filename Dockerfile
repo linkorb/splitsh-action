@@ -1,19 +1,20 @@
-FROM debian:buster-slim
-
-LABEL repository="https://github.com/claudiodekker/splitsh-action"
-LABEL homepage="https://github.com/claudiodekker/splitsh-action"
-LABEL maintainer="Claudio Dekker <claudio@ubient.net>"
-
-RUN apt-get update && \
-    apt-get install -y git wget && \
-    rm -rf /var/lib/apt/lists/*
-
+# Stage 1: Download and extract (this layer is discarded)
+FROM alpine:latest AS downloader
 RUN wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz && \
-    tar -zxpf lite_linux_amd64.tar.gz -C /usr/local/bin/ && \
-    rm lite_linux_amd64.tar.gz
+    tar -zxpf lite_linux_amd64.tar.gz -C /usr/local/bin/
 
-RUN mkdir -p ~/.ssh
-RUN ssh-keyscan github.com gitlab.com bitbucket.org ssh.dev.azure.com vs-ssh.visualstudio.com >> ~/.ssh/known_hosts
+# Stage 2: Final lightweight image
+FROM alpine:latest
+
+LABEL repository="https://github.com/linkorb/splitsh-action"
+LABEL homepage="https://github.com/linkorb/splitsh-action"
+LABEL maintainer="Ayesh Karunaratne <ayesh@aye.sh>"
+
+RUN apk add --no-cache git openssh-client libc6-compat && \
+    mkdir -p ~/.ssh && \
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+COPY --from=downloader /usr/local/bin/splitsh-lite /usr/local/bin/
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
