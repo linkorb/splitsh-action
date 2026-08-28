@@ -96,6 +96,21 @@ git remote add splitsh_target_remote "$authenticated_remote"
 echo "Target remote configured successfully."
 
 echo ""
+echo "=== Testing target repository access ==="
+
+echo "Running git ls-remote against target repository..."
+echo "Remote: $remote_https"
+
+if git ls-remote splitsh_target_remote; then
+  echo "git ls-remote succeeded."
+  echo "Target repository is accessible with the provided token."
+else
+  echo "ERROR: git ls-remote failed." >&2
+  echo "The target repository may not be accessible with the provided token." >&2
+  exit 1
+fi
+
+echo ""
 echo "=== Splitting repository ==="
 echo "Prefix: $prefix"
 
@@ -122,6 +137,7 @@ fi
 
 echo "Target reference: $target_ref"
 echo "Commit SHA:       $SHA1"
+echo "Full refspec:     $SHA1:$target_ref"
 
 echo ""
 echo "=== Pushing split repository ==="
