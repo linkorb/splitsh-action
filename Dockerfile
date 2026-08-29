@@ -6,10 +6,16 @@ RUN wget https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd
 # Stage 2: Final lightweight image
 FROM alpine:latest
 
+ARG VERSION=dev
+
+ENV SPLITSH_ACTION_VERSION=$VERSION
+
 LABEL repository="https://github.com/linkorb/splitsh-action"
 LABEL homepage="https://github.com/linkorb/splitsh-action"
 LABEL maintainer="Ayesh Karunaratne <ayesh@aye.sh>"
 LABEL org.opencontainers.image.description="split-sh runner container image"
+LABEL description="split-sh runner container image"
+LABEL org.opencontainers.image.version=$VERSION
 
 RUN apk add --no-cache \
     git \

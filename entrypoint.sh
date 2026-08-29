@@ -3,6 +3,7 @@
 set -eu
 
 echo "=== Starting repository split ==="
+echo "Version: ${SPLITSH_ACTION_VERSION:-unknown}"
 
 if [ "$#" -ne 4 ]; then
   echo "ERROR: Invalid number of arguments. Expected 4, got $#." >&2
