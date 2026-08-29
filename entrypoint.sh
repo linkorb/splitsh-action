@@ -37,8 +37,6 @@ echo "GITHUB_TOKEN is set."
 echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
 echo ""
-echo "=== Authenticating GitHub CLI ==="
-printf '%s' "$GITHUB_TOKEN" | gh auth login --with-token
 echo "GitHub-Cli Auth status:"
 gh auth status
 
