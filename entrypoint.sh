@@ -12,7 +12,10 @@ C_GREEN='\033[1;32m'
 C_YELLOW='\033[1;33m'
 C_CYAN='\033[1;36m'
 
-log_header()         { printf "\n\n\n${C_CYAN}${C_BOLD}=== %s ===${C_RESET}\n" "$1"; }
+log_header() {
+  printf "::endgroup::\n"
+  printf "::group::${C_CYAN}${C_BOLD}=== %s ===${C_RESET}\n\n" "$1"
+}
 log_error()          { printf "${C_RED}${C_BOLD}ERROR:${C_RESET} ${C_RED}%s${C_RESET}\n" "$1" >&2; }
 log_success()        { printf "${C_GREEN}✔ %s${C_RESET}\n" "$1"; }
 log_info()           { printf "${C_BOLD}%s${C_RESET}\n" "$1"; }
