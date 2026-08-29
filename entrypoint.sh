@@ -37,6 +37,15 @@ echo "GITHUB_TOKEN is set."
 echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
 echo ""
+echo "=== Authenticating GitHub CLI ==="
+printf '%s' "$GITHUB_TOKEN" | gh auth login --with-token
+echo "GitHub-Cli Auth status:"
+gh auth status
+
+echo "=== Configuring GitHub CLI authentication for Git ==="
+gh auth setup-git
+
+echo ""
 echo "=== Preparing remote URL ==="
 
 case "$remote" in
@@ -54,8 +63,6 @@ esac
 
 echo "Remote URL converted successfully:"
 echo "  $remote_https"
-
-authenticated_remote="https://${GITHUB_TOKEN}@${remote_https#https://}"
 
 echo ""
 echo "=== Configuring Git ==="
@@ -91,7 +98,7 @@ else
 fi
 
 echo "Adding target remote..."
-git remote add splitsh_target_remote "$authenticated_remote"
+git remote add splitsh_target_remote "$remote_https"
 
 echo "Target remote configured successfully."
 
@@ -103,7 +110,7 @@ echo "Remote: $remote_https"
 
 if git ls-remote splitsh_target_remote; then
   echo "git ls-remote succeeded."
-  echo "Target repository is accessible with the provided token."
+  echo "Target repository is accessible with the provided GitHub authentication."
 else
   echo "ERROR: git ls-remote failed." >&2
   echo "The target repository may not be accessible with the provided token." >&2
