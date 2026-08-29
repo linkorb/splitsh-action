@@ -11,7 +11,12 @@ LABEL homepage="https://github.com/linkorb/splitsh-action"
 LABEL maintainer="Ayesh Karunaratne <ayesh@aye.sh>"
 LABEL org.opencontainers.image.description="split-sh runner container image"
 
-RUN apk add --no-cache git openssh-client libc6-compat && \
+RUN apk add --no-cache \
+    git \
+    openssh-client \
+    libc6-compat \
+    github-cli \
+    curl && \
     mkdir -p ~/.ssh && \
     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
