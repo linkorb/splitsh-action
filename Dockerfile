@@ -20,8 +20,7 @@ LABEL org.opencontainers.image.version=$VERSION
 RUN apk add --no-cache \
     git \
     libc6-compat \
-    github-cli \
-    curl
+    github-cli
 
 COPY --from=downloader /usr/local/bin/splitsh-lite /usr/local/bin/
 
