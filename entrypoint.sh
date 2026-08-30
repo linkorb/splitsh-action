@@ -104,8 +104,15 @@ case "$remote" in
     ;;
 esac
 
+# Remove optional .git suffix.
+remote_https=${remote_https%.git}
+
+# Extract owner/repository for GitHub CLI.
+remote_repo=${remote_https#https://github.com/}
+
 log_success "Remote URL converted successfully."
 log_value "HTTPS URL" "$remote_https"
+log_value "GitHub repo" "$remote_repo"
 
 # ==========================================
 
@@ -207,8 +214,52 @@ git push splitsh_target_remote \
   --verbose \
   $DRY_RUN_FLAG
 
+log_success "Split repository pushed successfully."
+
+# ==========================================
+# Create GitHub releases for tags on the
+# monorepo's current HEAD.
+#
+# The release tag is created on the target
+# repository and points to the split SHA1.
 # ==========================================
 
+log_header "Checking for releases on HEAD"
+
+HEAD_TAGS=$(git tag --points-at HEAD)
+
+if [ -z "$HEAD_TAGS" ]; then
+  log_info "No tags found on the current HEAD."
+else
+  log_info "Tags found on the current HEAD:"
+  printf '%s\n' "$HEAD_TAGS"
+
+  printf '%s\n' "$HEAD_TAGS" | while IFS= read -r tag; do
+    [ -z "$tag" ] && continue
+
+    log_header "Creating GitHub release"
+    log_value "Tag" "$tag"
+    log_value "Target repo" "$remote_repo"
+    log_value "Target SHA" "$SHA1"
+
+    if [ -n "$DRY_RUN_FLAG" ]; then
+      log_info "[DRY RUN] Would create GitHub release:"
+      log_value "Tag" "$tag"
+      log_value "Target" "$SHA1"
+      log_value "Repository" "$remote_repo"
+      continue
+    fi
+
+    gh release create "$tag" \
+      --repo "$remote_repo" \
+      --target "$SHA1" \
+      --generate-notes
+
+    log_success "GitHub release created: $tag"
+  done
+fi
+
+# ==========================================
 
 if [ -n "$DRY_RUN_FLAG" ]; then
   log_header "SUCCESS [dry-run]"
@@ -216,10 +267,10 @@ else
   log_header "SUCCESS"
 fi
 
-log_success "Repository split and pushed successfully."
+log_success "Repository split and release processing completed successfully."
 log_value "Commit" "$SHA1"
 log_value "Target" "$target_ref"
 
 if [ -n "$DRY_RUN_FLAG" ]; then
-  log_info "[DRY RUN: no changes were actually pushed]"
+  log_info "[DRY RUN: no changes were actually pushed or released]"
 fi
