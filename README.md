@@ -128,3 +128,27 @@ docker run --rm \
  - `https://github.com/your-username/subsplit-of-package-one.git`: The remote repository to split your package into.
  - `main`: the branch name or the tag name to split your package into.
  - `false`: (or `"true"`): Whether the reference should be a tag instead of a branch.
+
+## `git push --dry-run`
+
+If you want to see what the splitter will do, you can pass the `DRY_RUN` environment variable:
+
+```yaml
+         - name: Split package ${{ matrix.package }}
+           uses: "linkorb/splitsh-action@v1.2.1"
+           env:
+             GITHUB_TOKEN: ${{ secrets.MONOREPO_SPLITTER_PERSONAL_ACCESS_TOKEN }}
+             DRY_RUN: 'true'
+           with:
+             prefix: "packages/${{ matrix.package }}"
+             remote: "https://github.com/your-username/subsplit-of-${{ matrix.package }}.git"
+             reference: "${{ github.ref_name }}"
+             as_tag: "${{ startsWith(github.ref, 'refs/tags/') }}"
+```
+
+## Contributing
+
+Please feel free to open a PR or issue if you have any questions or suggestions.
+
+Credits to the original author of the [splitsh-lite](https://github.com/splitsh/lite) project and the
+[claudiodekker/splitsh-action](https://github.com/claudiodekker/splitsh-action) that this fork is based on.
