@@ -144,6 +144,7 @@ if git ls-remote splitsh_target_remote; then
 else
   log_error "git ls-remote failed."
   log_error "The target repository may not be accessible with the provided token."
+  log_error "Please make sure that the actions/checkout step was run with persist-credentials: false"
   exit 1
 fi
 
