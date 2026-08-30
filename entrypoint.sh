@@ -24,6 +24,7 @@ log_value()          { printf "  %-12s ${C_YELLOW}%s${C_RESET}\n" "$1:" "$2"; }
 
 log_header "Starting repository split"
 log_value "Version" "${SPLITSH_ACTION_VERSION:-unknown}"
+log_value "Dry run" "${DRY_RUN:-false}"
 
 # ==========================================
 
@@ -37,11 +38,25 @@ remote=$2
 reference=$3
 as_tag=$4
 
+DRY_RUN=${DRY_RUN:-false}
+DRY_RUN_FLAG=""
+
+# Strictly check if DRY_RUN is exactly "true"
+if [ "$DRY_RUN" = "true" ]; then
+  DRY_RUN_FLAG="--dry-run"
+fi
+
 log_info "Arguments received:"
 log_value "Prefix" "$prefix"
 log_value "Remote" "$remote"
 log_value "Reference" "$reference"
 log_value "As tag" "$as_tag"
+
+if [ -n "$DRY_RUN_FLAG" ]; then
+  log_value "Dry-run" "Yes"
+else
+  log_value "Dry-run" "No"
+fi
 
 # ==========================================
 
@@ -189,11 +204,22 @@ log_info "Starting git push..."
 git push splitsh_target_remote \
   "$SHA1:$target_ref" \
   --force \
-  --verbose
+  --verbose \
+  $DRY_RUN_FLAG
 
 # ==========================================
 
-log_header "SUCCESS"
+
+if [ -n "$DRY_RUN_FLAG" ]; then
+  log_header "SUCCESS [dry-run]"
+else
+  log_header "SUCCESS"
+fi
+
 log_success "Repository split and pushed successfully."
 log_value "Commit" "$SHA1"
 log_value "Target" "$target_ref"
+
+if [ -n "$DRY_RUN_FLAG" ]; then
+  log_info "[DRY RUN: no changes were actually pushed]"
+fi

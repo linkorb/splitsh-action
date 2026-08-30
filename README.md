@@ -138,7 +138,7 @@ If you want to see what the splitter will do, you can pass the `DRY_RUN` environ
            uses: "linkorb/splitsh-action@v1.2.1"
            env:
              GITHUB_TOKEN: ${{ secrets.MONOREPO_SPLITTER_PERSONAL_ACCESS_TOKEN }}
-             DRY_RUN: 'true'
+             DRY_RUN: "true" # as a string.
            with:
              prefix: "packages/${{ matrix.package }}"
              remote: "https://github.com/your-username/subsplit-of-${{ matrix.package }}.git"
